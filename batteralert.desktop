@@ -1,0 +1,5 @@
+[Desktop Entry]
+ Type=Application
+ Exec=/opt/BatterAlert/battery_alert.sh
+ Name=batter_alert_service
+ Comment=This service will alert to improve batter life

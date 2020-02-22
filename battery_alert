@@ -1,0 +1,24 @@
+#!/bin/bash
+AUTOSTART_FILE="~/.config/autostart/batteralert.desktop"
+echo "$1"
+if [ "$1" == "start" ]
+then
+  if [ -f $AUTOSTART_FILE ]
+  then
+    rm -rf ~/.config/autostart/batteralert.desktop
+  fi
+  # cp batteralert.desktop ~/.config/autostart/
+  echo "Batter Alert Started Successfully."
+  echo "The service will come to effor after system reboot."
+elif [ "$1" == "stop" ]
+then
+  if [ -f $AUTOSTART_FILE ]
+  then
+    EXEC_RM_FILE=`rm -f ~/.config/autostart/batteralert.desktop`
+    echo "Comand Response $EXEC_RM_FILE"
+  fi
+  echo "Batter Alert Stopped Successfully."
+  echo "The service will come to effor after system reboot."
+else
+  echo "Unrecoganized argument passed. \n start - To Start the Service \n stop - To Stop the Service"
+fi
