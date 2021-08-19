@@ -29,19 +29,19 @@ beacon()
 # beacon 1 0
 while true
 do
-  FLAG=`dpkg --get-selections sox | awk '{print match($0,"install")}' `
-  FLAG_DISCHARGING=`upower -i $(upower -e | grep BAT) | grep --color=never -E "state" | awk '{print match($0,"discharging")}'`
-  FLAG_CHARGING=`upower -i $(upower -e | grep BAT) | grep --color=never -E "state" | awk '{print match($0,"charging")}'`
+  FLAG=`dpkg --get-selections sox | awk '{print match($0,"install")}'`
   CHARGE_PERCENT=`upower -i $(upower -e | grep BAT) | grep --color=never -E "percentage"`
+  BATTERY_STATE=`upower -i $(upower -e | grep BAT) | grep --color=never -E "state"`
   GET_PERCENT=$(echo $CHARGE_PERCENT | cut -c13-14)
-  if [ $FLAG_DISCHARGING -gt 0 -a $FLAG_CHARGING -eq 0 -a $GET_PERCENT -le 35 ]
+  GET_STATE=$(echo $BATTERY_STATE | cut -d' ' -f 2)
+  if [ $GET_STATE = "discharging" -a $GET_PERCENT -le 30 ]
   then
-    echo "Your Laptop is changed less than or  36%. Please turn on power switch"
+    notify-send -u normal -i battery -t 5000 "$(echo -e "Your Laptop charge is less than 30%.\nPlease turn on power switch.")"
     beacon 1 $FLAG
-  elif [ $FLAG_DISCHARGING -eq 0 -a $FLAG_CHARGING -gt 0 -a $GET_PERCENT -ge 82 ]
+  elif [ $GET_STATE = "charging" -a $GET_PERCENT -ge 90 ]
   then
-    echo "Your Laptop is changed more than %. Please turn off power switch"
+    notify-send -u normal -i battery -t 5000 "$(echo -e "Your Laptop charge is more than 90%.\nPlease turn off power switch.")"
     beacon 1 $FLAG
   fi
-  sleep 300
+  sleep 10
 done
